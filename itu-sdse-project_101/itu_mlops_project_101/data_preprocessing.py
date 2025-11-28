@@ -99,3 +99,14 @@ scaler = MinMaxScaler()
 scaler.fit(cont_vars)
 
 cont_vars = pd.DataFrame(scaler.transform(cont_vars), columns=cont_vars.columns)
+
+
+# Combine data
+cont_vars = cont_vars.reset_index(drop=True)
+cat_vars = cat_vars.reset_index(drop=True)
+
+data = pd.concat([cat_vars, cont_vars], axis=1)
+
+
+# Save train data to file
+data.to_csv('train_data_gold.csv', index=False)
