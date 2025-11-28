@@ -63,3 +63,39 @@ data = data.dropna(axis=0, subset=["lead_indicator"])
 data = data.dropna(axis=0, subset=["lead_id"])
 
 data = data[data.source == "signup"]
+
+
+# Define categorical and continuous columns
+vars = [
+    "lead_indicator", 
+    "customer_group", 
+    "onboarding", 
+    "source"
+]
+
+for col in vars:
+    data[col] = data[col].astype("object")
+
+cont_vars = data.loc[:, ((data.dtypes=="float64")|(data.dtypes=="int64"))]
+cat_vars = data.loc[:, (data.dtypes=="object")]
+
+
+# Handle outliers
+cont_vars = cont_vars.apply(
+    lambda x: x.clip(
+        lower = (x.mean()-2*x.std()),
+        upper = (x.mean()+2*x.std())
+    )
+)
+
+
+# Impute missing data
+cont_vars = cont_vars.apply(impute_missing_values) 
+cat_vars = cat_vars.apply(impute_missing_values)
+
+
+# Standardize data
+scaler = MinMaxScaler()
+scaler.fit(cont_vars)
+
+cont_vars = pd.DataFrame(scaler.transform(cont_vars), columns=cont_vars.columns)
