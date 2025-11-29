@@ -30,3 +30,48 @@ class LRWrapper(mlflow.pyfunc.PythonModel):
     def predict(self, context, model_input):
         """Predict probabilities for the positive class."""
         return self.model.predict_proba(model_input)[:, 1]
+    
+
+# Define date and path for the experiment
+current_date = datetime.datetime.now().strftime("%Y_%B_%d")
+data_gold_path = "train_data_gold.csv"
+experiment_name = current_date
+
+
+# Create mlruns directories and set experiment
+os.makedirs("mlruns", exist_ok=True)
+os.makedirs("mlruns/.trash", exist_ok=True)
+
+mlflow.set_experiment(experiment_name)
+
+
+# Load data 
+data = pd.read_csv(data_gold_path)
+data = data.drop(["lead_id", "customer_code", "date_part"], axis=1)
+
+
+# Handle dummy variables
+cat_cols = ["customer_group", "onboarding", "source"] 
+cat_vars = data[cat_cols]
+other_vars = data.drop(cat_cols, axis=1)
+
+for col in cat_vars:
+    cat_vars = create_dummy_cols(cat_vars, col)
+
+data = pd.concat([other_vars, cat_vars], axis=1)
+
+for col in data:
+    data[col] = data[col].astype("float64")
+
+
+# Split data into train and test
+y = data["lead_indicator"]
+X = data.drop(["lead_indicator"], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, 
+    y, 
+    random_state=42, 
+    test_size=0.15, 
+    stratify=y
+)
