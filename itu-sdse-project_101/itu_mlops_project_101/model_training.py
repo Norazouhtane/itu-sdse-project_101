@@ -106,3 +106,33 @@ xgboost_model.save_model(xgboost_model_path)
 model_results = {
    xgboost_model_path: classification_report(y_train, y_pred_train, output_dict=True)
 }
+
+
+# Model training using logistic regression
+mlflow.sklearn.autolog(log_input_examples=True, log_models=False)
+experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
+
+with mlflow.start_run(experiment_id=experiment_id) as run:
+    model = LogisticRegression()
+    lr_model_path = "lead_model_lr.pkl"
+
+    params = {
+              'solver': ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
+              'penalty':  ["none", "l1", "l2", "elasticnet"],
+              'C' : [100, 10, 1.0, 0.1, 0.01]
+    }
+    model_grid = RandomizedSearchCV(model, param_distributions= params, verbose=3, n_iter=10, cv=3)
+    model_grid.fit(X_train, y_train)
+
+    y_pred_train = model_grid.predict(X_train)
+    y_pred_test = model_grid.predict(X_test)
+
+    mlflow.log_metric('f1_score', f1_score(y_test, y_pred_test))
+    mlflow.log_artifacts("artifacts", artifact_path="model")
+    mlflow.log_param("data_version", "00000")
+    
+    mlflow.pyfunc.log_model('model', python_model=LRWrapper(model))
+
+# Save model results
+model_classification_report = classification_report(y_test, y_pred_test, output_dict=True)
+model_results[lr_model_path] = model_classification_report
