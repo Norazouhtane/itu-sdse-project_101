@@ -136,3 +136,9 @@ with mlflow.start_run(experiment_id=experiment_id) as run:
 # Save model results
 model_classification_report = classification_report(y_test, y_pred_test, output_dict=True)
 model_results[lr_model_path] = model_classification_report
+
+
+# Save model results of both models as json file
+model_results_path = "model_results.json"
+with open(model_results_path, 'w+') as results_file:
+    json.dump(model_results, results_file)
