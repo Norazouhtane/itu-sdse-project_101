@@ -48,3 +48,17 @@ results_df = pd.DataFrame({model: val["weighted avg"] for model, val in model_re
 # Save model with best f1 sore
 best_model = results_df.sort_values("f1-score", ascending=False).iloc[0].name
     # is this used anywhere??
+
+
+# Register best model
+run_id = experiment_best["run_id"]
+
+if run_id is not None:
+
+    model_uri = "runs:/{run_id}/{artifact_path}".format(
+        run_id=run_id,
+        artifact_path=artifact_path
+    )
+    model_details = mlflow.register_model(model_uri=model_uri, name=model_name)
+    wait_until_ready(model_details.name, model_details.version)
+    model_details = dict(model_details)
