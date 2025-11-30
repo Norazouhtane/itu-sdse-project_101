@@ -21,3 +21,20 @@ def wait_until_ready(model_name, model_version):
         if status == ModelVersionStatus.READY:
             break
         time.sleep(1)
+
+
+# Define constants
+current_date = datetime.datetime.now().strftime("%Y_%B_%d")
+artifact_path = "model"
+model_name = "lead_model"
+experiment_name = current_date
+
+
+# Get experiment with best f1 score
+experiment_ids = [mlflow.get_experiment_by_name(experiment_name).experiment_id]
+
+experiment_best = mlflow.search_runs(
+    experiment_ids=experiment_ids,
+    order_by=["metrics.f1_score DESC"],
+    max_results=1
+).iloc[0]
