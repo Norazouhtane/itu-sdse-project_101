@@ -12,6 +12,7 @@ client = MlflowClient()
 
 # Helper functions
 def wait_until_ready(model_name, model_version):
+    """Wait until a registered MLflow model is at READY state."""
     for _ in range(10):
         model_version_details = client.get_model_version(
           name=model_name,
@@ -24,6 +25,7 @@ def wait_until_ready(model_name, model_version):
         time.sleep(1)
 
 def wait_for_deployment(model_name, model_version, stage='Staging'):
+    """Wait until the model reached the specified stage in mlflow."""
     status = False
     while not status:
         model_version_details = dict(
