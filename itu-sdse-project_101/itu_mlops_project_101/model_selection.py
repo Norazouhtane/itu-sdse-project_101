@@ -62,11 +62,6 @@ with open("model_results.json", "r") as f:
     model_results = json.load(f)
 results_df = pd.DataFrame({model: val["weighted avg"] for model, val in model_results.items()}).T
 
-# Save model with best f1 sore
-best_model = results_df.sort_values("f1-score", ascending=False).iloc[0].name
-    # is this used anywhere??
-
-
 # Register best model
 run_id = experiment_best["run_id"]
 
