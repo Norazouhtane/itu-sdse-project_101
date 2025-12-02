@@ -4,6 +4,7 @@ import os
 import mlflow
 import json
 import pandas as pd
+import joblib
 
 from xgboost import XGBRFClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
@@ -34,7 +35,7 @@ class LRWrapper(mlflow.pyfunc.PythonModel):
 
 # Define date and path for the experiment
 current_date = datetime.datetime.now().strftime("%Y_%B_%d")
-data_gold_path = "train_data_gold.csv"
+data_gold_path = "../data/processed/train_data_gold.csv"
 experiment_name = current_date
 
 
@@ -112,9 +113,10 @@ model_results = {
 mlflow.sklearn.autolog(log_input_examples=True, log_models=False)
 experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
 
+
 with mlflow.start_run(experiment_id=experiment_id) as run:
     model = LogisticRegression()
-    lr_model_path = "lead_model_lr.pkl"
+    lr_model_path = "../models/lead_model_lr.pkl"
 
     params = {
               'solver': ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
@@ -130,6 +132,8 @@ with mlflow.start_run(experiment_id=experiment_id) as run:
     mlflow.log_metric('f1_score', f1_score(y_test, y_pred_test))
     mlflow.log_artifacts("artifacts", artifact_path="model")
     mlflow.log_param("data_version", "00000")
+
+    joblib.dump(value=model, filename=lr_model_path)
     
     mlflow.pyfunc.log_model('model', python_model=LRWrapper(model))
 
