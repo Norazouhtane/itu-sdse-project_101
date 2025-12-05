@@ -27,7 +27,7 @@ func Build(ctx context.Context) error {
 	defer client.Close()
 
 	python := client.Container().From("python:3.12.2-bookworm").
-		WithDirectory("/project", client.Host().Directory("."))
+		WithDirectory("/project", client.Host().Directory("itu-sdse-project_101"))
 
 	// Install dependencies
 	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
