@@ -1,6 +1,7 @@
 # Import necessary libraries
 import pandas as pd
 import numpy as np
+import subprocess
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -17,6 +18,10 @@ def impute_missing_values(x, method="mean"):
     else:
         x = x.fillna(x.mode()[0])
     return x
+
+
+subprocess.run( ["dvc", "update", "raw_data.csv"], cwd="/project/data/raw") 
+subprocess.run( ["dvc", "pull"], cwd="/project/data/raw")
 
 
 # Read and filter data based on dates
