@@ -30,7 +30,7 @@ func Build(ctx context.Context) error {
 		WithDirectory("/project", client.Host().Directory("."))
 
 	// Install dependencies
-	python = python.WithExec([]string{"pip", "install", "pandas", "numpy", "scikit-learn", "xgboost", "mlflow", "joblib", "scipy"})
+	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
 
 	// Run preprocessing
 	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_preprocessing.py"})
