@@ -20,7 +20,7 @@ def impute_missing_values(x, method="mean"):
 
 
 # Read and filter data based on dates
-data = pd.read_csv("../data/raw/raw_data.csv")
+data = pd.read_csv("/project/data/raw/raw_data.csv")
 
 max_date = "2024-01-31"
 min_date = "2024-01-01"
@@ -109,4 +109,4 @@ data = pd.concat([cat_vars, cont_vars], axis=1)
 
 
 # Save train data to file
-data.to_csv('../data/processed/train_data_gold.csv', index=False)
+data.to_csv('/project/data/processed/train_data_gold.csv', index=False)

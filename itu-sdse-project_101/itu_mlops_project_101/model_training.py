@@ -35,7 +35,7 @@ class LRWrapper(mlflow.pyfunc.PythonModel):
 
 # Define date and path for the experiment
 current_date = datetime.datetime.now().strftime("%Y_%B_%d")
-data_gold_path = "../data/processed/train_data_gold.csv"
+data_gold_path = "/project/data/processed/train_data_gold.csv"
 experiment_name = current_date
 
 
@@ -116,7 +116,7 @@ experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
 
 with mlflow.start_run(experiment_id=experiment_id) as run:
     model = LogisticRegression()
-    lr_model_path = "../models/lead_model_lr.pkl"
+    lr_model_path = "/project/models/lead_model_lr.pkl"
 
     params = {
               'solver': ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
