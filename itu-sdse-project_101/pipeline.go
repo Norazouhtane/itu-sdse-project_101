@@ -27,15 +27,20 @@ func Build(ctx context.Context) error {
 	defer client.Close()
 
 	python := client.Container().From("python:3.12.2-bookworm").
-		WithDirectory("python", client.Host().Directory("itu_mlops_project_101"))
+		WithDirectory("/project", client.Host().Directory("."))
 
-	python = python.WithExec([]string{"python", "python/data_preprocessing.py"})
+	// Install dependencies
+	python = python.WithExec([]string{"pip", "install", "pandas", "numpy", "scikit-learn", "xgboost", "mlflow", "joblib", "scipy"})
 
-	python = python.WithExec([]string{"python", "python/model_training.py"})
+	// Run preprocessing
+	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_preprocessing.py"})
+
+	// Run training
+	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/model_training.py"})
 
 	_, err = python.
-		Directory("output").
-		Export(ctx, "output")
+		Directory("/project/models").
+		Export(ctx, "models")
 	if err != nil {
 		return err
 	}
