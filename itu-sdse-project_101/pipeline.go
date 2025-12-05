@@ -33,6 +33,7 @@ func Build(ctx context.Context) error {
 	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
 
 	// DVC pull data
+	python = python.WithExec([]string{"dvc", "update", "raw_data.csv", "/project/data/raw"})
 	python = python.WithExec([]string{"dvc", "pull", "/project/data/raw"})
 
 	// Run preprocessing
