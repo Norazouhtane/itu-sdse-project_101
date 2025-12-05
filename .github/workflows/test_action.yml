@@ -25,3 +25,9 @@ jobs:
           verb: run
           args: go run pipeline.go
           version: "0.19.6"
+
+      - name: Upload model output
+        uses: actions/upload-artifact@v4
+        with:
+          name: model output
+          path: itu-sdse-project_101/models
