@@ -27,10 +27,13 @@ func Build(ctx context.Context) error {
 	defer client.Close()
 
 	python := client.Container().From("python:3.12.2-bookworm").
-		WithDirectory("/project", client.Host().Directory("itu-sdse-project_101"))
+		WithDirectory("/project", client.Host().Directory("."))
 
 	// Install dependencies
 	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
+
+	// DVC pull data
+	python = python.WithExec([]string{"dvc", "pull", "/project/data/raw"})
 
 	// Run preprocessing
 	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_preprocessing.py"})
