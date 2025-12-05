@@ -29,12 +29,13 @@ func Build(ctx context.Context) error {
 	python := client.Container().From("python:3.12.2-bookworm").
 		WithDirectory("/project", client.Host().Directory("."))
 
+	// Install and initialise git
+	python = python.WithExec([]string{"apt-get", "update"})
+	python = python.WithExec([]string{"apt-get", "install", "--yes", "git"})
+	python = python.WithExec([]string{"git", "init", "/project"})
+
 	// Install dependencies
 	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
-
-	// DVC pull data
-	python = python.WithExec([]string{"dvc", "update", "raw_data.csv", "/project/data/raw"})
-	python = python.WithExec([]string{"dvc", "pull", "/project/data/raw"})
 
 	// Run preprocessing
 	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_preprocessing.py"})
