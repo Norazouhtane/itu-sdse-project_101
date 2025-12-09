@@ -27,10 +27,10 @@ jobs:
           version: "0.19.6"
 
       - name: Upload Model Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.4.0
         with:
-          name: model output
-          path: itu-sdse-project_101/models
+          name: model 
+          path: itu-sdse-project_101/models/lead_model_lr.pkl
       
       - name: Run Model Inference Test Action
         uses: lasselundstenjensen/itu-sdse-project-model-validator@main
