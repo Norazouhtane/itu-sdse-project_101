@@ -37,10 +37,13 @@ func Build(ctx context.Context) error {
 	// Install dependencies
 	python = python.WithExec([]string{"pip", "install", "-r", "/project/requirements.txt"})
 
-	// Run preprocessing
-	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_preprocessing.py"})
+	// Run data cleaning
+	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_cleaning.py"})
 
-	// Run training
+	// Run data feature engineering
+	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/data_features.py"})
+
+	// Run model training
 	python = python.WithExec([]string{"python", "/project/itu_mlops_project_101/model_training.py"})
 
 	_, err = python.
