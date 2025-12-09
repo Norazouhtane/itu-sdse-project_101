@@ -1,6 +1,9 @@
 name: Run Dagger pipeline
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
