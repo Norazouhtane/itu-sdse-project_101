@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4.4.0
         with:
           name: model 
-          path: itu-sdse-project_101/models/lead_model_lr.pkl
+          path: itu-sdse-project_101/models/model.pkl
       
       - name: Run Model Inference Test Action
         uses: lasselundstenjensen/itu-sdse-project-model-validator@main
