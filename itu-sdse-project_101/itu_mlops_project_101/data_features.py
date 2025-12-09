@@ -1,7 +1,5 @@
 # Import necessary libraries
 import pandas as pd
-import numpy as np
-import subprocess
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -19,66 +17,27 @@ def impute_missing_values(x, method="mean"):
         x = x.fillna(x.mode()[0])
     return x
 
-
-subprocess.run( ["dvc", "update", "raw_data.csv"], cwd="/project/data/raw") 
-subprocess.run( ["dvc", "pull"], cwd="/project/data/raw")
-
-
-# Read and filter data based on dates
-data = pd.read_csv("/project/data/raw/raw_data.csv")
-
-max_date = "2024-01-31"
-min_date = "2024-01-01"
-
-max_date = pd.to_datetime(max_date).date()
-min_date = pd.to_datetime(min_date).date()
-
-data["date_part"] = pd.to_datetime(data["date_part"]).dt.date
-data = data[(data["date_part"] >= min_date) & (data["date_part"] <= max_date)]
+def create_dummy_cols(df, col):
+    """Create one-hot encoded columns and drop the original column."""
+    df_dummies = pd.get_dummies(df[col], prefix=col, drop_first=True)
+    new_df = pd.concat([df, df_dummies], axis=1)
+    new_df = new_df.drop(col, axis=1)
+    return new_df
 
 
-# Feature selection
-data = data.drop(
-    [
-        "is_active", 
-        "marketing_consent", 
-        "first_booking", 
-        "existing_customer", 
-        "last_seen"
-    ],
-    axis=1
-)
-
-data = data.drop(
-    [
-        "domain", 
-        "country", 
-        "visited_learn_more_before_booking", 
-        "visited_faq"
-    ],
-    axis=1
-)
-
-
-# Data cleaning
-data["lead_indicator"].replace("", np.nan, inplace=True)
-data["lead_id"].replace("", np.nan, inplace=True)
-
-data = data.dropna(axis=0, subset=["lead_indicator"])
-data = data.dropna(axis=0, subset=["lead_id"])
-
-data = data[data.source == "signup"]
+# Load cleaned data 
+data = pd.read_csv("/project/data/interim/data_clean.csv")
 
 
 # Define categorical and continuous columns
-vars = [
+variables = [
     "lead_indicator", 
     "customer_group", 
     "onboarding", 
     "source"
 ]
 
-for col in vars:
+for col in variables:
     data[col] = data[col].astype("object")
 
 cont_vars = data.loc[:, ((data.dtypes=="float64")|(data.dtypes=="int64"))]
@@ -113,5 +72,22 @@ cat_vars = cat_vars.reset_index(drop=True)
 data = pd.concat([cat_vars, cont_vars], axis=1)
 
 
-# Save train data to file
+# Drop irrelevant columns
+data = data.drop(["lead_id", "customer_code", "date_part"], axis=1)
+
+
+# Handle dummy variables
+cat_cols = ["customer_group", "onboarding", "source"] 
+cat_vars = data[cat_cols]
+other_vars = data.drop(cat_cols, axis=1)
+
+for col in cat_vars:
+    cat_vars = create_dummy_cols(cat_vars, col)
+
+data = pd.concat([other_vars, cat_vars], axis=1)
+
+for col in data:
+    data[col] = data[col].astype("float64")
+
+
 data.to_csv('/project/data/processed/train_data_gold.csv', index=False)
