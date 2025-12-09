@@ -26,8 +26,11 @@ jobs:
           args: go run pipeline.go
           version: "0.19.6"
 
-      - name: Upload model output
+      - name: Upload Model Artifact
         uses: actions/upload-artifact@v4
         with:
           name: model output
           path: itu-sdse-project_101/models
+      
+      - name: Run Model Inference Test Action
+        uses: lasselundstenjensen/itu-sdse-project-model-validator@main
