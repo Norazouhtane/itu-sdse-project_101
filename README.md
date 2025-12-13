@@ -6,8 +6,8 @@ The overall task of this project is to ensure reproducability of a model in a gi
 
 ## Data and File Structure
 The ML algorithm identifies users on the website that are new possible customers. It handles a classification problem where: 
-    - input: collects behaviour data from users
-    - output: are they converted/turned into customer
+- input: collects behaviour data from users
+- output: are they converted/turned into customer
 
 ### Data Folder
 The data folder, originally contains the raw data, and then stores the data in the appropriate folder according to the steps in the data pipeline.
@@ -27,7 +27,15 @@ The `test_action.yml` file ensures that the dagger pipeline can run directly in 
 Go to 'Actions' in the GitHub repository and in 'Run Dagger pipeline' press `Run workflow`. 
 
 
-## Authors and Acknowledgement 
+## Authors
+Karima Mahdaoui, kmah@itu.dk
+
+Felicia Violeta Sørensen, feso@itu.dk
+
+Nora Zouhtane, nozo@itu.dk
+
+## Acknowledgement 
+
 
 
 
