@@ -4,15 +4,16 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 
+# Define functions for feature engineering
 def impute_missing_values(x, method="mean"):
     """
-    Impute missing values in a pandas Series. 
+    Impute missing values in a pandas Series.
     
-    For numeric values, the mean or median of the column is used, otherwise the mode is used. 
+    For numeric values, the mean or median of the column is used, otherwise the mode is used.
     
     Parameters:
         x (pd.Series): pandas Series to impute.
-        method (str): Stategy for filling out NaN for numeric values. Default = "mean", otherwise median. 
+        method (str): Strategy for filling out NaN for numeric values. Default = "mean", otherwise median.
     """
     if (x.dtype == "float64") | (x.dtype == "int64"):
         x = x.fillna(x.mean()) if method=="mean" else x.fillna(x.median())
@@ -49,12 +50,12 @@ variables = [
 for col in variables:
     data[col] = data[col].astype("object")
 
-cont_vars = data.loc[:, ((data.dtypes=="float64")|(data.dtypes=="int64"))]
-cat_vars = data.loc[:, (data.dtypes=="object")]
+continuous_columns = data.loc[:, ((data.dtypes=="float64")|(data.dtypes=="int64"))]
+categorical_columns = data.loc[:, (data.dtypes=="object")]
 
 
-# Handle outliers
-cont_vars = cont_vars.apply(
+# Handle outliers by clipping extreme values (mean ± 2std)
+continuous_columns = continuous_columns.apply(
     lambda x: x.clip(
         lower = (x.mean()-2*x.std()),
         upper = (x.mean()+2*x.std())
@@ -63,40 +64,41 @@ cont_vars = cont_vars.apply(
 
 
 # Impute missing data
-cont_vars = cont_vars.apply(impute_missing_values) 
-cat_vars = cat_vars.apply(impute_missing_values)
+continuous_columns = continuous_columns.apply(impute_missing_values) 
+categorical_columns = categorical_columns.apply(impute_missing_values)
 
 
-# Standardize data
+# Scale continuous columns using min-max scaling
 scaler = MinMaxScaler()
-scaler.fit(cont_vars)
+scaler.fit(continuous_columns)
 
-cont_vars = pd.DataFrame(scaler.transform(cont_vars), columns=cont_vars.columns)
+continuous_columns = pd.DataFrame(scaler.transform(continuous_columns), columns=continuous_columns.columns)
 
 
-# Combine data
-cont_vars = cont_vars.reset_index(drop=True)
-cat_vars = cat_vars.reset_index(drop=True)
+# Recombine continuous and categorical columns
+continuous_columns = continuous_columns.reset_index(drop=True)
+categorical_columns = categorical_columns.reset_index(drop=True)
 
-data = pd.concat([cat_vars, cont_vars], axis=1)
+data = pd.concat([categorical_columns, continuous_columns], axis=1)
 
 
 # Drop irrelevant columns
 data = data.drop(["lead_id", "customer_code", "date_part"], axis=1)
 
 
-# Handle dummy variables
-cat_cols = ["customer_group", "onboarding", "source"] 
-cat_vars = data[cat_cols]
-other_vars = data.drop(cat_cols, axis=1)
+# One-hot encode categorical features
+categorical_column_names = ["customer_group", "onboarding", "source"] 
+categorical_columns = data[categorical_column_names]
+other_columns = data.drop(categorical_column_names, axis=1)
 
-for col in cat_vars:
-    cat_vars = create_dummy_cols(cat_vars, col)
+for col in categorical_columns:
+    categorical_columns = create_dummy_cols(categorical_columns, col)
 
-data = pd.concat([other_vars, cat_vars], axis=1)
+data = pd.concat([other_columns, categorical_columns], axis=1)
 
 for col in data:
     data[col] = data[col].astype("float64")
 
 
+# Save processed data as CSV file
 data.to_csv('/project/data/processed/train_data_gold.csv', index=False)
