@@ -4,11 +4,12 @@ import numpy as np
 import subprocess
 
 
+# Run dvc update and dvc pull to get raw data
 subprocess.run( ["dvc", "update", "raw_data.csv"], cwd="/project/data/raw") 
 subprocess.run( ["dvc", "pull"], cwd="/project/data/raw")
 
 
-# Read and filter data based on dates
+# Read in data and filter it based on dates
 data = pd.read_csv("/project/data/raw/raw_data.csv")
 
 max_date = "2024-01-31"
@@ -21,20 +22,14 @@ data["date_part"] = pd.to_datetime(data["date_part"]).dt.date
 data = data[(data["date_part"] >= min_date) & (data["date_part"] <= max_date)]
 
 
-# Feature selection
+# Drop unnecessary columns
 data = data.drop(
     [
         "is_active", 
         "marketing_consent", 
         "first_booking", 
         "existing_customer", 
-        "last_seen"
-    ],
-    axis=1
-)
-
-data = data.drop(
-    [
+        "last_seen",
         "domain", 
         "country", 
         "visited_learn_more_before_booking", 
@@ -44,15 +39,17 @@ data = data.drop(
 )
 
 
-# Data cleaning
+# Replace empty strings with NaN values and then drop all rows containing NaN
 data["lead_indicator"].replace("", np.nan, inplace=True)
 data["lead_id"].replace("", np.nan, inplace=True)
 
 data = data.dropna(axis=0, subset=["lead_indicator"])
 data = data.dropna(axis=0, subset=["lead_id"])
 
-data = data[data.source == "signup"]
+
+# Only keep rows where source == "signup"
+data = data[data.source == "signup"] 
 
 
-# Save train data to file
+# Save cleaned data as CSV file
 data.to_csv('/project/data/interim/data_clean.csv', index=False)
