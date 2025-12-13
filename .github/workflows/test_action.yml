@@ -1,4 +1,4 @@
-name: Run Dagger pipeline
+name: Run Dagger Pipeline and Inference Test
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   dagger:
-    name: Run Dagger pipeline
+    name: Run Dagger Pipeline
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,7 @@ jobs:
           go-version: 1.25.4
           cache: false
 
-      - name: Run Dagger pipeline
+      - name: Run Dagger Pipeline
         uses: dagger/dagger-for-github@v8.2.0
         with:
           verb: run
@@ -33,6 +33,11 @@ jobs:
         with:
           name: model 
           path: models/model.pkl
-      
+
+  inference:
+    name: Run Model Inference Test
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Run Model Inference Test Action
         uses: lasselundstenjensen/itu-sdse-project-model-validator@main
