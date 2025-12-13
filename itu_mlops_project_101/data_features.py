@@ -6,10 +6,13 @@ from sklearn.preprocessing import MinMaxScaler
 
 def impute_missing_values(x, method="mean"):
     """
-    Fills out NaN cells with the mean/median of the column.
+    Impute missing values for a Pandas DataFrame. 
+    
+    For numeric values, the mean or median of the column is used, otherwise the mode is used. 
+    
     Parameters:
-        x (pd.Series): Pandas col to describe.
-        method (str): Values: "mean", "median"
+        x (pd.Series): Pandas DataFrame to impute
+        method (str): Stategy for filling out NaN for numeric values. Default = "mean", otherwise median. 
     """
     if (x.dtype == "float64") | (x.dtype == "int64"):
         x = x.fillna(x.mean()) if method=="mean" else x.fillna(x.median())
