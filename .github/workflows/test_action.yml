@@ -36,6 +36,7 @@ jobs:
 
   inference:
     name: Run Model Inference Test
+    needs: dagger
     runs-on: ubuntu-latest
 
     steps:
