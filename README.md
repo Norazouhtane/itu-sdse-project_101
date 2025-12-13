@@ -24,7 +24,7 @@ The `test_action.yml` file in *.github/workflows* ensures that the dagger pipeli
 
 
 ## How to Use
-Go to 'Actions' in the GitHub repository and in 'Run Dagger pipeline' press `Run workflow`. The `model.pkl` file will be accessible after running the workflow. By clicking on the job and then 'Run Model Inference Test Action', the last line should be: ✅ Inference output matches the expected output.
+Go to 'Actions' in the GitHub repository and in 'Run Dagger Pipeline and Inference Test' press `Run workflow`. Click on the latest workflow, the `model.pkl` file will be accessible after running the workflow. By clicking on the job 'Run Model Inference Test' and then 'Run Model Inference Test Action', the last line should be: ✅ Inference output matches the expected output.
 
 
 ## Authors
