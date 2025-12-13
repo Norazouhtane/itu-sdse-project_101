@@ -1,7 +1,7 @@
 # ITU MLOps'25 - Project Group 101 
 
 ## Description of Task
-The overall task of this project is to ensure reproducability of a model in a given GitHub repository. The task was to reconstruct and reorganize the forked repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. The repository should also follow a Cookiecutter project structure. For reference the diagram below provides the struture overview: 
+The overall task of this project is to ensure reproducability of a model in a given GitHub repository. The task was to reconstruct and reorganize the forked repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. The repository should also follow a Cookiecutter project structure. For reference the diagram below provides an overview of the structure: 
 ![Project Architecture](./docs/project-architecture.png)
 
 
