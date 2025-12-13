@@ -1,7 +1,7 @@
 # ITU MLOps'25 - Project Group 101 
 
 ## Description of Task
-The overall task of this project is to ensure reproducability of a model in a given GitHub repository. Given the GitHub repository the task was to fork the repository, reconstruct and reorganize the repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. For reference the diagram below provides the struture overview: 
+The overall task of this project is to ensure reproducability of a model in a given GitHub repository. The task was to reconstruct and reorganize the forked repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. The repository should also follow a Cookiecutter project structure. For reference the diagram below provides the struture overview: 
 ![Project Architecture](./docs/project-architecture.png)
 
 
@@ -22,7 +22,7 @@ The `pipeline.go` file ensures that the correct requirements are installed from 
 Lastly it saves the appropriate model in the folder models. 
 
 ### test_action.yml File
-The `test_action.yml` file ensures that the dagger pipeline can run directly in GitHub, that the model artifact is created, and the test for model inference is run.    
+The `test_action.yml` file in the '.github/workflows' folder ensures that the dagger pipeline can run directly in GitHub, that the model artifact is created, and the test for model inference is run.    
 
 
 ## How to Use
@@ -38,7 +38,6 @@ Nora Zouhtane, nozo@itu.dk
 
 ## Acknowledgement 
 
-
-
+[Dryad README file template](https://datadryad.org/docs/README.md)
 
 
