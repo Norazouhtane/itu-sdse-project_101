@@ -1,30 +1,30 @@
 # ITU MLOps'25 - Project Group 101 
 
-## Description of task
+## Description of Task
 The overall task of this project is to ensure reproducability of a model in a given GitHub repository. Given the GitHub repository the task was to fork the repository, reconstruct and reorganize the repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. For reference the image below provides the context: 
 
 
-## Data and file structure
+## Data and File Structure
 The ML algorithm identifies users on the website that are new possible customers. It handles a classification problem where: 
     - input: collects behaviour data from users
     - output: are they converted/turned into customer
 
-### Data folder
+### Data Folder
 The data folder, originally contains the raw data, and then stores the data in the appropriate folder according to the steps in the data pipeline.
 
-### Pipelinge.go file and itu_mlops_project_101 folder 
+### Pipelinge.go File and itu_mlops_project_101 Folder 
 The `pipeline.go` file ensures that the correct requirements are installed from the `requirements.txt` after which it runs the .py files from itu_mlops_project_101 folder in subsequent order:
 1. `data_cleaning.py` which ........
 2. `data_features.py`
 3. `model_training.py` 
 Lastly it saves the appropriate model in the folder models. 
 
-### test_action.yml file
+### test_action.yml File
 The `test_action.yml` file ensures that the dagger pipeline can run directly in GitHub, that the model artifact is created, and the test for model inference is run.    
 
 
-## How to use
-Go to Actions in the GitHub repository and in run run dagger pipeline press `Run workflow`. 
+## How to Use
+Go to 'Actions' in the GitHub repository and in 'Run Dagger pipeline' press `Run workflow`. 
 
 
 ## Authors and Acknowledgement 
