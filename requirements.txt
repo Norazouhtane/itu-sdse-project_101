@@ -1,8 +1,5 @@
-scikit-learn
-pandas
-mlflow
-xgboost
-scipy
-joblib
-numpy
-dvc
+scikit-learn==1.8.0
+pandas==2.3.3
+joblib==1.5.2
+numpy==2.3.5
+dvc==3.64.2
