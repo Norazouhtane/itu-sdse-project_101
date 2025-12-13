@@ -1,61 +1,34 @@
-# ITU MLOps Project 101
+# ITU MLOps'25 - Project Group 101 
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+## Description of task
+The overall task of this project is to ensure reproducability of a model in a given GitHub repository. Given the GitHub repository the task was to fork the repository, reconstruct and reorganize the repository so that it runs using a dagger pipeline and GitHub workflow. The GitHub workflow should output a model artifact named 'model' which should then be used in an inference test to ensure that the correct model was trained. For reference the image below provides the context: 
 
-This is our MLOps project 2025
 
-## Project Organization
+## Data and file structure
+The ML algorithm identifies users on the website that are new possible customers. It handles a classification problem where: 
+    - input: collects behaviour data from users
+    - output: are they converted/turned into customer
 
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         itu_mlops_project_101 and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── itu_mlops_project_101   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes itu_mlops_project_101 a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
+### Data folder
+The data folder, originally contains the raw data, and then stores the data in the appropriate folder according to the steps in the data pipeline.
 
---------
+### Pipelinge.go file and itu_mlops_project_101 folder 
+The `pipeline.go` file ensures that the correct requirements are installed from the `requirements.txt` after which it runs the .py files from itu_mlops_project_101 folder in subsequent order:
+1. `data_cleaning.py` which ........
+2. `data_features.py`
+3. `model_training.py` 
+Lastly it saves the appropriate model in the folder models. 
+
+### test_action.yml file
+The `test_action.yml` file ensures that the dagger pipeline can run directly in GitHub, that the model artifact is created, and the test for model inference is run.    
+
+
+## How to use
+Go to Actions in the GitHub repository and in run run dagger pipeline press `Run workflow`. 
+
+
+## Authors and Acknowledgement 
+
+
+
 
