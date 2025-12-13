@@ -15,11 +15,9 @@ The 'data' folder, originally contains the raw data, and then stores the data in
 
 ### Pipeline.go File and itu_mlops_project_101 Folder 
 The `pipeline.go` file ensures that the correct requirements are installed from the `requirements.txt` after which it runs the .py files from 'itu_mlops_project_101' folder in subsequent order:
-1. `data_cleaning.py` which ........
-2. `data_features.py`
-3. `model_training.py` 
-
-Lastly it saves the appropriate model in the folder models. 
+1. `data_cleaning.py`: Removes unnecessary columns and rows with missing values. 
+2. `data_features.py`: Scales continuous variables, one-hot encodes categorical variables, and saves the final golden training data.    
+3. `model_training.py`: Trains model using logistic regression and saves trained model as pkl file in 'models' folder.  
 
 ### test_action.yml File
 The `test_action.yml` file in the '.github/workflows' folder ensures that the dagger pipeline can run directly in GitHub, that the model artifact is created, and the test for model inference is run.    
