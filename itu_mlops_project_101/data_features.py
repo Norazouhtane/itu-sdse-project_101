@@ -6,12 +6,12 @@ from sklearn.preprocessing import MinMaxScaler
 
 def impute_missing_values(x, method="mean"):
     """
-    Impute missing values for a Pandas DataFrame. 
+    Impute missing values in a pandas Series. 
     
     For numeric values, the mean or median of the column is used, otherwise the mode is used. 
     
     Parameters:
-        x (pd.Series): Pandas DataFrame to impute
+        x (pd.Series): pandas Series to impute.
         method (str): Stategy for filling out NaN for numeric values. Default = "mean", otherwise median. 
     """
     if (x.dtype == "float64") | (x.dtype == "int64"):
@@ -21,7 +21,13 @@ def impute_missing_values(x, method="mean"):
     return x
 
 def create_dummy_cols(df, col):
-    """Create one-hot encoded columns and drop the original column."""
+    """
+    Create one-hot encoded columns and drop the original column.
+    
+    Parameters:
+    df (pd.DataFrame): pandas DataFrame to encode.
+    col (str): Column to replace with one-hot encoded ones.
+    """
     df_dummies = pd.get_dummies(df[col], prefix=col, drop_first=True)
     new_df = pd.concat([df, df_dummies], axis=1)
     new_df = new_df.drop(col, axis=1)
